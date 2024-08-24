@@ -1,0 +1,116 @@
+{% extends 'master.html' %}
+
+{% load cart_tag %}
+{%block body %}
+
+<section id="cart_items">
+    <div class="container">
+        <div class="breadcrumbs">
+            <ol class="breadcrumb">
+              <li><a href="{% url 'index' %}">Home</a></li>
+              <li class="active">Your Order</li>
+            </ol>
+        </div>
+
+        <div class="table-responsive cart_info">
+            
+            <table class="table table-condensed">
+                <thead width="50%">
+                    <tr class="cart_menu">
+                        <td class="image">Item</td>
+                        <td class="description">Name</td>
+                        <td class="price">Price</td>
+                        <td class="quantity">Quantity</td>
+                        <td class="total">Total</td>
+                        
+                    </tr>
+                </thead>
+
+                <tbody>
+                    
+                   
+
+                    {% for key,value in request.session.cart.items %}
+                    <tr>
+                        <td class="cart_product" width="100%" >
+                            <a href=""><img src="{{value.image}}" width="35%" alt=""></a>
+                        </td>
+                        <td class="cart_description" width="25%" >
+                            <h4 width="50%"><a href="">{{value.name}} </a></h4>
+                            
+                        </td>
+                        <td class="cart_price" width="10%" >
+                            <p >₹{{value.price}}</p>
+                        </td>
+                        <td class="cart_quantity" width="20%" >
+                            <div class="cart_quantity_button">
+                                <input class="cart_quantity_input" type="text" name="quantity" value="{{value.quantity}}"  size="2" readonly>
+                            </div>
+                        </td>
+                        <td class="cart_total" width="5%">
+                            <p class="cart_total_price">₹{{ value.price|multiply:value.quantity }}</p>
+                        </td>
+                       
+                    </tr>
+
+                    {% endfor %}
+                    
+                </tbody>
+
+                <tfoot>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <hr>
+                     <h4>Sub Total:</h4>   
+                    </td>
+                    <td></td>
+                    <td>
+                        <hr>
+                        <h3>{{cart_total_amount}}</h3>
+                    </td>
+                </tfoot>
+            </table>
+        </div>
+      
+
+        <a  class="btn btn-success" id="rzp-button1" style="float: right;">Place Your Order</a> 
+
+    <br><br><br>
+    </div>
+</section> <!--/#cart_items-->
+<br>
+
+<form action="{% url 'success' %}" method="post">
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+var options = {
+    "key": "rzp_test_hxGGVbVgT8ypzW", 
+    "amount": "amount", 
+    "currency": "INR",
+    "name": "Toy House", 
+    "description": "Test Transaction",
+    "image": "https://example.com/your_logo",
+    "order_id": "{{order_id}}", 
+    "callback_url": "http://127.0.0.1:8000/success",
+    "prefill": {
+        "name": "Gaurav Kumar", //your customer's name
+        "email": "gaurav.kumar@example.com",
+        "contact": "9000090000"
+    },
+    "notes": {
+        "address": "Razorpay Corporate Office"
+    },
+    "theme": {
+        "color": "#3399cc"
+    }
+};
+var rzp1 = new Razorpay(options);
+document.getElementById('rzp-button1').onclick = function(e){
+    rzp1.open();
+    e.preventDefault();
+}
+</script>
+</form>
+
+{% endblock %}

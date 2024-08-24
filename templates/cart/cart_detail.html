@@ -1,0 +1,91 @@
+{% extends 'master.html' %}
+{% load cart_tag %}
+{%block body %}
+
+<section id="cart_items">
+    <div class="container">
+        <div class="breadcrumbs">
+            <ol class="breadcrumb"  style="margin-top: -2%;">
+              <li><a href="{% url 'index' %}">Home</a></li>
+              <li class="active">Shopping Cart</li>
+            </ol>
+        </div>
+        <!-- <a class="btn btn-danger"  style="margin-top: -4%;  float: right;" href="{% url 'cart_clear' %}">Clear Cart</a> -->
+        <div  class="table-responsive cart_info" >
+            
+            <table class="table table-condensed" >
+                <thead width="50%">
+                    <tr class="cart_menu" style="margin-top: -3%;">
+                        <td class="image">Item</td>
+                        <td class="description">Name</td>
+                        <td class="price">Price</td>
+                        <td class="quantity">Quantity</td>
+                        <td class="total">Total</td>
+                        <td >remove</td>
+                        <td></td>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    
+                   
+
+                    {% for key,value in request.session.cart.items %}
+                    <tr>
+                        <td class="cart_product" width="100%" >
+                            <a href=""><img src="{{value.image}}" width="50%" alt=""></a>
+                        </td>
+                        <td class="cart_description" width="25%" >
+                            <h4 width="50%"><a href="">{{value.name}} </a></h4>
+                            
+                        </td>
+                        <td class="cart_price" width="10%" >
+                            <p >₹{{value.price}}</p>
+                        </td>
+                        <td class="cart_quantity" width="20%" >
+                            <div class="cart_quantity_button">
+                                <a class="cart_quantity_up" width="50%" href="{% url 'item_increment' value.product_id %}"> + </a>
+                                <input class="cart_quantity_input" type="text" name="quantity" value="{{value.quantity}}" autocomplete="off" size="2">
+                                <a class="cart_quantity_down" href="{% url 'item_decrement' value.product_id %}"> - </a>
+                            </div>
+                        </td>
+                        <td class="cart_total" width="5%">
+                            <p class="cart_total_price">₹{{ value.price|multiply:value.quantity }}</p>
+                        </td>
+                        <td class="delete" width="-10%">
+                            <a style="margin-left: 40%; margin-bottom: 20%;" href="{% url 'item_clear' key %}" class=" btn btn-danger fa fa-times"></a>
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+                    
+                </tbody>
+
+                <tfoot>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <hr>
+                     <h4>Sub Total:</h4>   
+                    </td>
+                    <td></td>
+                    <td>
+                        <hr>
+                        <h3>{{cart_total_amount}}</h3>
+                    </td>
+                </tfoot>
+            </table>
+        </div>
+      
+        <form method="post" action="{% url 'checkout' %}">
+        {% csrf_token %}
+        <input value="{{cart_total_amount}}" name="amount" hidden>
+        <a  style="float: right;"><button class="btn btn-success"  type="submit">Checkout</button></a> 
+        </form>
+    <br><br><br>
+    </div>
+</section> <!--/#cart_items-->
+<br>
+
+
+{% endblock %}

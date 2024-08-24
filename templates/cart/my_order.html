@@ -1,0 +1,100 @@
+{% extends 'master.html' %}
+
+{% load cart_tag %}
+
+{%block body %}
+
+<section id="cart_items">
+    <div class="container">
+        <div class="breadcrumbs">
+            <ol class="breadcrumb">
+              <li><a href="{% url 'index' %}">Home</a></li>
+              <li class="active">Your Order</li>
+            </ol>
+        </div>
+
+        <div class="table-responsive cart_info">
+            
+            <table class="table table-condensed">
+                <thead width="50%">
+                    <tr class="cart_menu">
+                        <td class="image">Item</td>
+                        <td class="description">Name</td>
+                        <td class="price">Price</td>
+                        <td class="quantity">Quantity</td>
+                        <td class="total">Total</td>
+                        <!-- <td class="total">paid</td> -->
+                    </tr>
+                </thead>
+
+                <tbody>
+                    
+                   
+
+                    {% for order_item in order_items %}
+                    <tr>
+                        <td class="cart_product" width="100%" >
+                            <a href=""><img src="{{order_item.image}}" width="35%" alt=""></a>
+                        </td>
+                        <td class="cart_description" width="25%" >
+                            <h4 width="50%"><a href="">{{order_item.product}} </a></h4>
+                            
+                        </td>
+                        <td class="cart_price" width="10%" >
+                            <p >₹{{order_item.price}}</p>
+                        </td>
+                        <td class="cart_quantity" width="20%" >
+                            <div class="cart_quantity_button">
+                                <input class="cart_quantity_input" type="text" name="quantity" value="{{order_item.quantity}}"  size="2" readonly>
+                            </div>
+                        </td>
+                        <td class="cart_total" width="10%">
+                            <p class="cart_total_price">₹{{ order_item.total }}</p>
+                        </td>
+                        
+                        
+                        <!-- <td class="cart_total" >
+                            
+                            {% if order.paid == Yes %}
+                            <p class="btn-success">Paid</p>
+                            {% else %}
+                            <p class=" btn-danger">Not Paid</p>
+                            {% endif %}
+                           
+                        </td> -->
+                        
+                        {% endfor %}
+                    </tr>
+
+                  
+                    
+                </tbody>
+
+                <tfoot>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <hr>
+                     <h4>Total Price:</h4>   
+                    </td>
+                    <td></td>
+                    <td>
+                        <hr>
+                        {% for order in orders %}
+                        <h3>{{ order.amount }}</h3>
+                        {% endfor %}
+                    </td>
+                </tfoot>
+            </table>
+        </div>
+      
+
+       
+
+    <br><br><br>
+    </div>
+</section> <!--/#cart_items-->
+<br>
+
+
+{% endblock %}
